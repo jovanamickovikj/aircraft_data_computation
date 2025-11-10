@@ -1,0 +1,54 @@
+HOW TO USE THE FUNCTIONS
+
+Import the functions
+
+from trajectory_quality import (
+    estimate_quality_stats,
+    estimate_quality_universal,
+    optimize_trajectory_aggressive,
+    optimize_trajectory_stats_based
+)
+
+
+Input format
+Each trajectory should be a NumPy array like:
+
+[timestamp, lat, lon, alt_FL]
+
+
+Example:
+
+traj = np.array([
+    [0, 52.0, 13.0, 300],
+    [10, 52.1, 13.1, 310],
+    [20, 52.2, 13.2, 320],
+])
+
+
+Quality estimation
+
+1. Dataset-based:
+  - score = estimate_quality_stats(traj, good_trajectories)
+
+2. Universal (no dataset needed):
+  - score = estimate_quality_universal(traj)
+
+
+Optimization
+
+1. Aggressive cleaning (fixed limits):
+  - traj_opt = optimize_trajectory_aggressive(traj)
+
+2. Stats-based cleaning (uses good trajectories):
+  - traj_opt = optimize_trajectory_stats_based(traj, good_trajectories)
+
+
+Typical workflow
+
+Clean trajectory → Compute quality:
+
+traj_clean = optimize_trajectory_stats_based(traj, good_trajectories)
+q1 = estimate_quality_stats(traj_clean, good_trajectories)
+q2 = estimate_quality_universal(traj_clean)
+
+All functions return either a cleaned trajectory or a quality score (0–100).
